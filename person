@@ -1,0 +1,29 @@
+#!/usr/bin/env node
+
+const yargs = require('yargs')
+const main = require('./main')
+
+const options = yargs
+  .usage('Usage: command [options]')
+  .command('get <id>', 'Show details on a specific Person')
+  .command('trips <id>', 'Show Person Trips')
+  .command('delete <id>', 'Delete a specific Person')
+  .command('edit <id>', 'Edit a Person')
+  .command('add', 'Add a Person')
+  .option('d', { alias: 'data', describe: `data in Json for edit and add`, type: 'json', demandOption: false })
+  .command('list', 'List People')
+  .option('n', { alias: 'name', describe: 'Filter by First Name', type: 'string', demandOption: false })
+  .option('g', { alias: 'gender', describe: 'Filter by Gender', type: 'string', demandOption: false }).choices('g', ['Male', 'Female'])
+  .option('f', { alias: 'filter', describe: `Advanced Filter, eg. 'LastName eq 'Kemp''`, type: 'string', demandOption: false })
+  .example([
+    [`$0 edit genevievereeves -d '{"FirstName": "Mehrdad"}'`],
+    [`$0 add -d '{"UserName": "mehrdad", "FirstName": "Mehrdad", "LastName": "Alizadeh"}'`],
+    [`$0 get mehrdad`],
+  ])
+  .showHelpOnFail(true)
+  .demandCommand(1, '')
+  .argv
+
+
+main(options)
+process.stdin.resume()
